@@ -79,3 +79,19 @@ Pid: 20392 Prefix: pmap- Addr: 0x400000 Len: 23191552
 > ls -al
 -rw-------. 1 root   root   23191552 Jul 22 16:34 pmap-20392-0x0000000000400000.hex
 -rw-------. 1 root   root    2338816 Jul 22 16:34 pmap-5356-0x0000559981e78000.hex
+
+### EXAMPLE 3 (one-liner to dump all readable segments of the process by name)
+Beware, all shared segments are dumped into separate files without gaps, you can easily eat all disk!
+
+> pgrep -f mysqld | while read pid; do ( sudo pmap -x $pid | awk -vPID=$pid "BEGIN{ printf(\"pmap-dump -p \" PID)};(\$5~/^r/){printf(\" 0x\" \$1 \" \" \$2)};END{printf(\"\\n\")}"); done | while read line; do sudo $line; done
+Pid: 20392 Prefix: pmap- Addr: 0x400000 Len: 23191552
+Pid: 20392 Prefix: pmap- Addr: 0x1c1d000 Len: 974848
+Pid: 20392 Prefix: pmap- Addr: 0x1d0b000 Len: 716800
+Pid: 20392 Prefix: pmap- Addr: 0x1dba000 Len: 925696
+Pid: 20392 Prefix: pmap- Addr: 0x7f835a800000 Len: 46137344
+Pid: 20392 Prefix: pmap- Addr: 0x7f835d7e2000 Len: 8388608
+Pid: 20392 Prefix: pmap- Addr: 0x7f835dfe3000 Len: 8388608
+Pid: 20392 Prefix: pmap- Addr: 0x7f835e7e4000 Len: 8388608
+Pid: 20392 Prefix: pmap- Addr: 0x7f835efe5000 Len: 8388608
+Pid: 20392 Prefix: pmap- Addr: 0x7f835f7e6000 Len: 8388608
+...
