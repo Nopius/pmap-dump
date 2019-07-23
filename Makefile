@@ -1,17 +1,19 @@
+SHELL = /bin/sh
 CFLAGS = -g
 CC = gcc
 prefix  ?= /usr
 sbindir ?= $(prefix)/sbin
-INSTALL_PROGRAM ?= install
+INSTALL ?= install
+INSTALL_PROGRAM ?= $(INSTALL)
 
-all:	pmap-dump
-	
+all:    pmap-dump
+
 pmap-dump: pmap-dump.c
-	$(CC) $(CFLAGS) -o pmap-dump pmap-dump.c
+	$(CC) $(CFLAGS) -o $@ $<
 
-install:
-	$(INSTALL_PROGRAM) -D pmap-dump $(DESTDIR)$(sbindir)/pmap-dump
-	
+install: pmap-dump
+	$(INSTALL_PROGRAM) -D $< $(DESTDIR)$(sbindir)/$<
+
 uninstall:
 	rm $(DESTDIR)$(sbindir)/pmap-dump
 
