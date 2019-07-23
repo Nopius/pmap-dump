@@ -1,17 +1,17 @@
 Name:		pmap-dump
-Version:	0.93
+Version:	0.94
 Release:	1%{?dist}
 Summary:	Dump running process memory segments into files
 
 Group:		Applications/System
 License:	GPL v.3
 URL:		https://github.com/Nopius/pmap-dump
-Source0:	https://github.com/Nopius/pmap-dump/archive/0.93.zip
+Source0:	https://github.com/Nopius/pmap-dump/archive/0.94.zip
 
 BuildRequires:	gcc make
 
 %description
-Utility to dump memory from virtual address of the running process to a file.
+Utility to dump virtual memory segments of the running process.
 
 %prep
 %setup -q
@@ -30,7 +30,7 @@ make install DESTDIR=%{buildroot} prefix=%{_prefix}
 
 %changelog
 * Tue Jul 23 2019 nopius@nopius.com
-- version 0.93
+- version 0.94
   * Added help message
   * Makefile is GNU friendly
 
