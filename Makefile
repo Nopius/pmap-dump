@@ -10,7 +10,7 @@ pmap-dump: pmap-dump.c
 	$(CC) $(CFLAGS) -o pmap-dump pmap-dump.c
 
 install:
-	$(INSTALL_PROGRAM) pmap-dump $(DESTDIR)$(prefix)$(sbindir)/pmap-dump
+	$(INSTALL_PROGRAM) -D pmap-dump $(DESTDIR)$(prefix)$(sbindir)/pmap-dump
 	
 uninstall:
 	rm $(DESTDIR)$(prefix)$(sbindir)/pmap-dump
