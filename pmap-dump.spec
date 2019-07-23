@@ -20,11 +20,11 @@ Utility to dump memory from virtual address of the running process to a file.
 make %{?_smp_mflags}
 
 %install
-make install DESTDIR=%{buildroot}
+make install DESTDIR=%{buildroot} prefix=%{_prefix}
 
 
 %files
-/usr/sbin/pmap-dump
+%{_sbindir}/pmap-dump
 
 %doc
 
