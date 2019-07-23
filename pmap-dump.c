@@ -211,7 +211,7 @@ main(int argc, char *argv[])
             }
             else if (nread<0) {
               perror("Read error");
-              return 6;
+              break; // continue parsing args
             }
             else {
               break;
