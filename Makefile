@@ -1,10 +1,19 @@
+CFLAGS = -g
+CC = gcc
+prefix  ?= /usr
+sbindir ?= /sbin
+INSTALL_PROGRAM ?= install
+
 all:	pmap-dump
 	
-pmap-dump:
-	gcc -g -o pmap-dump pmap-dump.c
+pmap-dump: pmap-dump.c
+	$(CC) $(CFLAGS) -o pmap-dump pmap-dump.c
 
 install:
-	install --strip pmap-dump /usr/sbin/pmap-dump
+	$(INSTALL_PROGRAM) pmap-dump $(DESTDIR)$(prefix)$(sbindir)/pmap-dump
 	
 uninstall:
-	rm /usr/sbin/pmap-dump
+	rm $(DESTDIR)$(prefix)$(sbindir)/pmap-dump
+
+clean: 
+	rm pmap-dump
