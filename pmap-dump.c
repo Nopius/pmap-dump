@@ -1,4 +1,4 @@
-/*     2019-07-22, by nopius@nopius.com
+/*     2019-07-23, by nopius@nopius.com
        This program can attach to a running process and dump virtual memory regions into hex files
        memory region should be readble 'has an r' flag
   
@@ -11,7 +11,9 @@
        UNINSTALL:
        make uninstall
   
-       USAGE (man process_vm_readv for details):
+       USE (man process_vm_readv for details):
+       pmap-dump -h
+
        [pgrep process_name]
        [pmap -x <PID> - look at the address (#1) and KBytes (#2) fields, append 0x for addr]
        run as root:
@@ -111,6 +113,17 @@ int getopt(int argc, char * const argv[], const char *optstring);
 #define DEFAULT_SUFFIX ".hex"
 #define min(A,B) A<B?A:B
 
+// Print usage 
+void usage(char *argv[]){
+  printf("Dump memory segments into files\n");
+  printf("Usage: %s -h | -p <PID> [-f <PREFIX>] addr len [addr1 len1 ...] [-p <PID2> [-f <PREFIX2> ' addr2 len2 ...]] ...\n", argv[0]);
+  printf("       -h          - get help\n");
+  printf("       -p <PID>    - pid of the running process to dump memory\n");
+  printf("       -f <PREFIX> - path and filename prefix to create memory dump files (default: \"%s\") \n",DEFAULT_PREFIX);
+  printf("       addr        - address of the readable memory segment as shown in 'pmap -x' prefixed with 0x: 0xAABBCC.. \n");
+  printf("       len         - length of specified segment in KBytes (base 1024), should divide by 4 (4K page size)\n");
+  printf("       options are parsed from left to right, multiple -p and -f override prefious values\n");
+}
 
 /* -f "vmem_"    - file prefix where to save dump
  * -p XXX      - process pid
@@ -136,8 +149,11 @@ main(int argc, char *argv[])
   struct iovec remote;		// ...
   char buffer[BUFSIZE];
 
-  while ((opt = getopt(argc, argv, "-p:f:")) != -1) {
+  while ((opt = getopt(argc, argv, "-p:f:h")) != -1) {
     switch (opt) {
+    case 'h':
+      usage(argv);
+      return 0;
     case 'f':
       prefix=optarg;
       break;
@@ -155,7 +171,7 @@ main(int argc, char *argv[])
         len_ptr=argv[optind-1];
         len=(size_t)strtoul(len_ptr, &str_ptr, 10)*1024;
         if ( len % 4096 ) {
-            printf("Len should be a factor of 4\n");
+            printf("Segment length should divide by 4\n");
             return 1;
         }
         if (!pid) {
@@ -207,5 +223,6 @@ main(int argc, char *argv[])
       }
     }
   }
+  if (pid==0) usage(argv);
   return 0;
 }
