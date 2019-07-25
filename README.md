@@ -1,7 +1,14 @@
 # pmap-dump
 
-Utility to dump running process memory by virtual addresses into files
+Utility to dump running process memory by virtual addresses into files.
 
+It's merely the same as:
+
+> gdb -pid [pid]
+
+>  dump memory pmem-pid.hex 0x00007f8b00000000 0x00007f8b00000000+65512
+
+but without gdb and without stopping process (though possibly inconsistent)
   
 ## HOW TO BUILD
 
