@@ -25,15 +25,18 @@ make uninstall
 ## HOW TO RUN
 
 This program works on Linux (tested on RHEL 7.x), man process_vm_readv for details.
+```
 - [pgrep process_name]
 - [pmap -x <PID> - look at the address (#1) and KBytes (#2) fields, append 0x for addr]
+
 run as root:
 - pmap-dump [-f <PREFIX>] -p <PID> addr1 len1(in KB) [ addr2 len2 ... ]
        -p - pid
        -f - filename prefix
             arguments read from left to right, dump is performed while parsing, 
             you may use -p and -f multiple times
-       
+```
+    
 ### EXAMPLE 1 (one pid, two segments)
 
 >  pgrep -lf mysqld
