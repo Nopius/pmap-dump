@@ -37,9 +37,12 @@ run as root:
 ### EXAMPLE 1 (one pid, two segments)
 
 >  pgrep -lf mysqld
+```
 20392 mysqld
+```
 
 > pmap -x 20392
+```
 pmap -x 20392
 20392:   /usr/sbin/mysqld --daemonize --pid-file=/var/run/mysqld/mysqld.pid
 Address           Kbytes     RSS   Dirty Mode  Mapping
@@ -52,40 +55,53 @@ Address           Kbytes     RSS   Dirty Mode  Mapping
 00007f835d7e1000       4       0       0 -----   [ anon ]
 00007f835d7e2000    8192       8       8 rw---   [ anon ]
 ...
+```
 
  > pmap-dump -p 20392 0x0000000001dba000 904 0x00007f835a800000 45056
+```
 Pid: 20392 Prefix: pmap- Addr: 0x1dba000 Len: 925696
 Pid: 20392 Prefix: pmap- Addr: 0x7f835a800000 Len: 46137344
-
+```
 > ls -al
+```
 -rw-------.   1 root   root     925696 Jul 22 16:31 pmap-20392-0x0000000001dba000.hex
 -rw-------.   1 root   root   46137344 Jul 22 16:31 pmap-20392-0x00007f835a800000.hex
-
+```
 ### EXAMPLE 2 (two pids, one segment from each)
 
 > pgrep -lf 'X|mysqld'
+```
 5356  X
 20392 mysqld
+```
 
-> pmap -x 5356 
+> pmap -x 5356
+```
 5356:   /usr/bin/X :0 -background none -noreset -audit 4 -verbose -auth /run/gdm/auth-for-gdm-FfPcyz/database -seat seat0 -nolisten tcp vt1
 Address           Kbytes     RSS   Dirty Mode  Mapping
 0000559981e78000    2284    1388       0 r-x-- Xorg
 ...
+```
 
 > pmap -x 20392
+```
 pmap -x 20392
 20392:   /usr/sbin/mysqld --daemonize --pid-file=/var/run/mysqld/mysqld.pid
 Address           Kbytes     RSS   Dirty Mode  Mapping
 0000000000400000   22648   12920       0 r-x-- mysqld
 ...
+```
 > pmap-dump -p 5356 0x0000559981e78000 2284 -p 20392 0x0000000000400000 22648
+```
 Pid: 5356 Prefix: pmap- Addr: 0x559981e78000 Len: 2338816
 Pid: 20392 Prefix: pmap- Addr: 0x400000 Len: 23191552
+```
 
 > ls -al
+```
 -rw-------. 1 root   root   23191552 Jul 22 16:34 pmap-20392-0x0000000000400000.hex
 -rw-------. 1 root   root    2338816 Jul 22 16:34 pmap-5356-0x0000559981e78000.hex
+```
 
 ### EXAMPLE 3 (one-liner to dump all readable segments of the process by name)
 Beware, all shared segments are dumped into separate files without gaps, you can easily eat all disk!
