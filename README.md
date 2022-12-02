@@ -109,4 +109,4 @@ Pid: 20392 Prefix: pmap- Addr: 0x400000 Len: 23191552
 ### EXAMPLE 3 (one-liner to dump all readable segments of the process by name)
 Beware, all shared segments are dumped into separate files without gaps, you can easily eat all disk!
 
-> pgrep -f mysqld | while read pid; do ( sudo pmap -x $pid | awk -vPID=$pid "BEGIN{ printf(\"pmap-dump -p \" PID)};(\$5~/^r/){printf(\" 0x\" \$1 \" \" \$2)};END{printf(\"\\n\")}"); done | while read line; do sudo $line; done
+> pgrep -f mysqld | while read pid; do ( sudo pmap -x $pid | awk -vPID=$pid 'BEGIN{ printf(\"pmap-dump -p \" PID)};(\$5~/^r/){printf(\" 0x\" \$1 \" \" \$2)};END{printf(\"\\n\")}'); done | while read line; do sudo $line; done
